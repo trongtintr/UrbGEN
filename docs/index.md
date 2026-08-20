@@ -154,7 +154,7 @@ extrudes, places and aligns the masses within the setback envelope.
 Seven footprint grammars (I,L,T,H,C/U,plus,courtyard,mixed), each parametrised by arm length ratio, width and
 length-to-width limits.
 
-![Typology variations under identical BCR and FAR targets](images/urbgen-typology.gif)
+![Building Typology](images/urbgen-typology.gif)
 ![Typology variations under identical BCR and FAR targets](images/urbgen-typology2.png)
 
 *Nine configurations at BCR 0.40 / FAR 3.0 — the constraint is held constant
