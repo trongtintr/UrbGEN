@@ -1,36 +1,32 @@
-# UrbGEN Documentation
-
-<p align="left">
-  <img src="images/urbgen-logo.jpg" width="240" alt="UrbGEN logo">
+<p align="center">
+  <img src="images/urbgen-logo.jpg" width="260" alt="UrbGEN logo">
 </p>
 
-<p align="left">
+<h1 align="center">UrbGEN</h1>
+
+<p align="center">
   <strong>Generative urban massing under planning constraints</strong><br>
   A GhPython-based tool for Grasshopper / Rhino
 </p>
 
+<p align="center">
+  <a href="https://rhinopackages.github.io/?owner=17087&search=urbgen&p=UrbGEN">
+    <img src="https://img.shields.io/badge/Rhino_Package_Manager-install-1a73e8" alt="Install via Package Manager"></a>
+  <a href="https://trongtintr.github.io/UrbGEN/">
+    <img src="https://img.shields.io/badge/docs-UrbGEN-0a7d3f" alt="Documentation"></a>
+  <img src="https://img.shields.io/badge/Rhino-7%20%7C%208-orange" alt="Rhino 7 | 8">
+  <img src="https://img.shields.io/badge/Grasshopper-GhPython-4c9a2a" alt="Grasshopper GhPython">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
+</p>
+
 ---
-UrbGEN — Generative Urban Massing Tool
-
-
-UrbGEN is a GhPython-based generative urban massing tool for Grasshopper/Rhino that automatically generates 3D building configurations from site boundaries and planning constraints. The tool enables rapid exploration of seven building typologies while targeting Building Coverage Ratio (BCR), Floor Area Ratio (FAR), building height, orientation,... requirements, supporting early-stage urban design and design-space exploration.
-
-
-Developed by: [Trong-Tin Tran](https://sites.google.com/view/trantrongtin) and [Ying-Chieh Chan](https://yingchiehchan.com/)
-
-Lab: Ying-Chieh Chan's Lab, Department of Civil Engineering, National Taiwan University
-
-Email: trongtintr@outlook.com | D14521024@ntu.edu.tw
-
-# UrbGEN
-
-## What is UrbGEN?
 
 UrbGEN is a GhPython-based generative urban massing tool for Grasshopper / Rhino
 that automatically generates 3D building configurations from site boundaries and
 planning constraints. It enables rapid exploration of seven building typologies
-while targeting FAR and BCR requirements, supporting multi-stage urban design
-and design-space exploration.
+while targeting Building Coverage Ratio (BCR), Floor Area Ratio (FAR), building
+height and orientation requirements, supporting early-stage urban design and
+design-space exploration.
 
 Instead of modelling massing options by hand, the designer defines the
 regulatory envelope — coverage, plot ratio, height limit, setback — and UrbGEN
@@ -38,7 +34,46 @@ resolves a family of valid configurations that satisfy it.
 
 ![UrbGEN generated massing across multiple sites](images/urbgen-generative.gif)
 
-*Massing generated across eleven sites, coloured by building height.*
+<sub>Massing generated across eleven sites, coloured by building height.</sub>
+
+---
+
+## Contents
+
+- [Installation](#installation)
+- [Why BCR and FAR?](#why-bcr-and-far)
+- [Key features](#key-features)
+- [How it works](#how-it-works)
+- [Building typologies](#building-typologies)
+- [Planning parameters](#planning-parameters)
+- [Components](#components)
+- [Examples](#examples)
+- [Research](#research)
+- [Citation](#citation)
+- [License](#license)
+- [Authors and contact](#authors-and-contact)
+
+---
+
+## Installation
+
+**Rhino Package Manager (recommended)**
+
+Open Rhino, run the `PackageManager` command, search for **urbgen** and install.
+Restart Rhino — the components appear under the **UrbGEN** tab in Grasshopper.
+
+**Yak CLI**
+
+```
+"C:\Program Files\Rhino 8\System\Yak.exe" install urbgen
+```
+
+**Manual**
+
+Download the `.gha` file from [Releases](https://github.com/trongtintr/UrbGEN/releases)
+and drop it into the Grasshopper components folder
+(`%AppData%\Grasshopper\Libraries`). Right-click the file → **Properties** →
+**Unblock**, then restart Rhino.
 
 ---
 
@@ -57,71 +92,60 @@ density — turning the regulatory envelope into a controlled experimental frame
 
 ---
 
----
-
-## Key Features
+## Key features
 
 <table>
 <tr>
-
 <td width="33%" valign="top">
 
-<b>Constraint-driven</b><br><br>
+**Constraint-driven**
 
-Converges on target <b>BCR</b> and <b>FAR</b> simultaneously, reporting the achieved
+Converges on target **BCR** and **FAR** simultaneously, reporting the achieved
 values and the residual error for every site.
 
 </td>
-
 <td width="33%" valign="top">
 
-<b>Seven typologies</b><br><br>
+**Seven typologies**
 
-<b>I, L, T, H, C/U, Plus</b> and <b>Courtyard</b> footprints, selectable per site or
+**I, L, T, H, C/U, Plus** and **Courtyard** footprints, selectable per site or
 assigned automatically.
 
 </td>
-
 <td width="33%" valign="top">
 
-<b>Multi-site batch</b><br><br>
+**Multi-site batch**
 
 Processes an entire block or district in one solve, with independent planning
 targets per parcel.
 
 </td>
-
 </tr>
-
 <tr>
-
 <td width="33%" valign="top">
 
-<b>Tower + podium</b><br><br>
+**Tower + podium**
 
 Generates podium masses with configurable offset, floor count and thickness,
 plus tower-to-podium ratio metrics.
 
 </td>
-
 <td width="33%" valign="top">
 
-<b>Height regulation</b><br><br>
+**Height regulation**
 
 Enforces maximum and minimum building heights in strict or soft modes, and
 reports violations and adjusted counts.
 
 </td>
-
 <td width="33%" valign="top">
 
-<b>Design-space ready</b><br><br>
+**Design-space ready**
 
 A seed input makes every run reproducible, so the component plugs directly into
 Wallacei, Colibri or Sobol sampling.
 
 </td>
-
 </tr>
 </table>
 
@@ -135,7 +159,7 @@ extrudes, places and aligns the masses within the setback envelope.
 
 [![UrbGEN Grasshopper definition](images/urbgen-workflow.png)](images/urbgen-workflow.png)
 
-*Click to view the full definition.*
+<sub>Click to view the full definition.</sub>
 
 **Pipeline**
 
@@ -149,24 +173,23 @@ extrudes, places and aligns the masses within the setback envelope.
 
 ---
 
-## Building Typologies
+## Building typologies
 
-Seven footprint grammars (I,L,T,H,C/U,plus,courtyard,mixed), each parametrised by arm length ratio, width and
-length-to-width limits.
-
+Seven footprint grammars — **I, L, T, H, C/U, Plus, Courtyard** (plus a *mixed*
+mode) — each parametrised by arm length ratio, width, and length-to-width limits.
 
 ![Typology variations under identical BCR and FAR targets](images/urbgen-typology2.png)
 
-*Nine configurations at BCR 0.40 / FAR 3.0 — the constraint is held constant
-while the typology and rotation mode vary.*
+<sub>Nine configurations at BCR 0.40 / FAR 3.0 — the constraint is held constant
+while the typology and rotation mode vary.</sub>
 
 ![C and U typology variations](images/urbgen-underBCRFARconstraint.png)
 
-*C/U typology under the same planning envelope, with and without global rotation.*
+<sub>C/U typology under the same planning envelope, with and without global rotation.</sub>
 
 ---
 
-## Planning Parameters
+## Planning parameters
 
 | Parameter | Input | Description |
 |---|---|---|
@@ -181,144 +204,93 @@ distance, growth step and iterations), **podium** (floors, offset range, floor
 height), **courtyard** (count, break width, split angle, layout mode) and
 **positioning** (snap to boundary, snap to setback, edge alignment).
 
-See [Components](https://trongtintr.github.io/UrbGEN/components/UrbGENgenerator/) for the full input and output reference.
+See the [component reference](https://trongtintr.github.io/UrbGEN/components/UrbGENgenerator/)
+for the full list of inputs and outputs.
 
 ![Height-coloured output across four seeds](images/urbgen-height-seeds.png)
 
-*Four generated alternatives on the same site, coloured 0–70 m.*
+<sub>Four generated alternatives on the same site, coloured 0–70 m.</sub>
 
 ---
 
-## Example
+## Components
+
+| | Component | Purpose |
+|---|---|---|
+| <img src="images/UrbGENgenerator_icon.png" width="24"> | [**UrbGEN Generator**](https://trongtintr.github.io/UrbGEN/components/UrbGENgenerator/) | Generates masses from a site curve under BCR / FAR / height constraints |
+| <img src="images/UrbGENPopulateRegion_icon.png" width="24"> | [**UrbGEN Populate Region**](https://trongtintr.github.io/UrbGEN/components/UrbGENPopulateRegion/) | Distributes candidate building centroids inside a bounded region |
+
+---
+
+## Examples
 
 A typical definition: site curves on the left, planning targets grouped by
 category in the middle, the UrbGEN component and its outputs on the right.
 
 ![UrbGEN in the Rhino viewport and Grasshopper canvas](images/urbgen-viewport.png)
 
-*Each site is labelled with its target BCR and the value actually achieved.*
+<sub>Each site is labelled with its target BCR and the value actually achieved.</sub>
 
 Because the solver is seeded, the same definition can be swept across a
 parameter space to produce large sets of valid alternatives:
 
 ![Design space exploration results](images/urbgen-spaceexplore.png)
 
-*64 of 1000 designs — Site 3, 18,481 m², at FAR 3.0 and BCR 40%.*
+<sub>64 of 1000 designs — Site 3, 18,481 m², at FAR 3.0 and BCR 40%.</sub>
 
 ![Nine generated alternatives at district scale](images/urbgen-alternatives.png)
 
-Sample files are provided in the `UrbGEN_example` folder of the repository.
-
----
-
-## Documentation
-
-<table>
-<tr>
-<td width="33%" valign="top">
-
-<b>Installation</b><br><br>
-
-<a href="https://rhinopackages.github.io/?owner=17087&search=urbgen&p=UrbGEN">
-Install UrbGEN
-</a>
-
-<br><br>
-
-Install through the Rhino Package Manager, Yak CLI, or by dropping the
-<code>.gha</code> file into the Grasshopper components folder.
-
-</td>
-
-<td width="33%" valign="top">
-
-<b>Components</b><br><br>
-
-<a href="https://trongtintr.github.io/UrbGEN/components/UrbGENgenerator/">
-View Documentation
-</a>
-
-<br><br>
-
-Reference for every input and output of the UrbGEN components.
-
-</td>
-
-<td width="33%" valign="top">
-
-<b>Examples</b><br><br>
-
-<a href="https://github.com/trongtintr/UrbGEN/tree/main/UrbGEN_example/UrbGEN_example">
-View Examples
-</a>
-
-<br><br>
-
-Grasshopper definitions covering single-site, multi-site, and design-space workflows.
-
-</td>
-</tr>
-</table>
-
-### Quick install
-
-Open Rhino, run the `PackageManager` command, search for **urbgen** and install.
-Restart Rhino — the components appear under the **UrbGEN** tab in Grasshopper.
-
-Alternatively, install the `.yak` package from the command line:
-
-```
-"C:\Program Files\Rhino 8\System\Yak.exe" install urbgen
-```
-
-### Components
-
-| | Component | Purpose |
-|---|---|---|
-| <img src="images/UrbGENgenerator_icon.png" width="24"> | **UrbGEN Generator** | Generates masses from a site curve under BCR / FAR / height constraints |
-| <img src="images/UrbGENPopulateRegion_icon.png" width="24"> | **UrbGEN Populate Region** | Distributes candidate building centroids inside a bounded region |
+Sample Grasshopper definitions covering single-site, multi-site and design-space
+workflows are in
+[`UrbGEN_example/`](https://github.com/trongtintr/UrbGEN/tree/main/UrbGEN_example/UrbGEN_example).
 
 ---
 
 ## Research
 
-### Methodology
-
 UrbGEN was developed as part of ongoing research on generative urban morphology
 and environmental performance. The tool couples a rule-based footprint grammar
 with an iterative growth solver.
 
-Generated datasets feed downstream analysis in Ladybug/Honeybee, ENVI-met and
+Generated datasets feed downstream analysis in Ladybug / Honeybee, ENVI-met and
 multi-objective optimisation workflows, supporting studies of daylight, view
 access, energy use intensity and outdoor thermal comfort across morphological
 alternatives.
 
+---
 
+## Citation
 
+If you use UrbGEN in academic work, please cite it as:
+
+```bibtex
+@software{tran_urbgen,
+  author  = {Tran, Trong-Tin and Chan, Ying-Chieh},
+  title   = {UrbGEN: Generative urban massing under planning constraints},
+  url     = {https://github.com/trongtintr/UrbGEN},
+  note    = {Ying-Chieh Chan's Lab, Department of Civil Engineering,
+             National Taiwan University}
+}
+```
 
 ---
 
-## About
+## License
 
-**[Trong-Tin Tran](https://sites.google.com/view/trantrongtin)** and **[Ying-Chieh Chan](https://yingchiehchan.com/)**
+Released under the [MIT License](LICENSE).
 
-Ying-Chieh Chan's Lab, Department of Civil Engineering, 
+---
+
+## Authors and contact
+
+**[Trong-Tin Tran](https://sites.google.com/view/trantrongtin)** and
+**[Ying-Chieh Chan](https://yingchiehchan.com/)**
+
+Ying-Chieh Chan's Lab, Department of Civil Engineering,
 National Taiwan University
 
-Contact: [trongtintr@outlook.com](mailto:trongtintr@outlook.com) | [D14521024@ntu.edu.tw](mailto:d14521024@ntu.edu.tw)
+[trongtintr@outlook.com](mailto:trongtintr@outlook.com) ·
+[D14521024@ntu.edu.tw](mailto:d14521024@ntu.edu.tw)
 
-Released under the MIT License.
-
-
-
-
-
-
-
-## Components by Subcategory
-### UrbGEN
-| Name | Description |
-|---|---|
-| ![UrbGEN generator](./images/UrbGENgenerator_icon.png) [UrbGEN generator](components/UrbGENgenerator.md) | UrbGEN generator component |
-| ![UrbGEN_PopulateRegion](./images/UrbGENPopulateRegion_icon.png) [UrbGEN_PopulateRegion](components/UrbGENPopulateRegion.md) | UrbGEN_PopulateRegion component |
-
+Bug reports and feature requests are welcome via
+[Issues](https://github.com/trongtintr/UrbGEN/issues).
