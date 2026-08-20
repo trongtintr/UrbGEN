@@ -63,56 +63,65 @@ density — turning the regulatory envelope into a controlled experimental frame
 
 <table>
 <tr>
+
 <td width="33%" valign="top">
 
-### Constraint-driven
+<b>Constraint-driven</b><br><br>
 
-Converges on target **BCR** and **FAR** simultaneously, reporting the achieved
+Converges on target <b>BCR</b> and <b>FAR</b> simultaneously, reporting the achieved
 values and the residual error for every site.
 
 </td>
+
 <td width="33%" valign="top">
 
-### Seven typologies
+<b>Seven typologies</b><br><br>
 
-**I, L, T, H, C/U, Plus** and **Courtyard** footprints, selectable per site or
+<b>I, L, T, H, C/U, Plus</b> and <b>Courtyard</b> footprints, selectable per site or
 assigned automatically.
 
 </td>
+
 <td width="33%" valign="top">
 
-### Multi-site batch
+<b>Multi-site batch</b><br><br>
 
 Processes an entire block or district in one solve, with independent planning
 targets per parcel.
 
 </td>
+
 </tr>
+
 <tr>
+
 <td width="33%" valign="top">
 
-### Tower + podium
+<b>Tower + podium</b><br><br>
 
 Generates podium masses with configurable offset, floor count and thickness,
 plus tower-to-podium ratio metrics.
 
 </td>
+
 <td width="33%" valign="top">
 
-### Height regulation
+<b>Height regulation</b><br><br>
 
 Enforces maximum and minimum building heights in strict or soft modes, and
 reports violations and adjusted counts.
 
 </td>
+
 <td width="33%" valign="top">
 
-### Design-space ready
+<b>Design-space ready</b><br><br>
 
 A seed input makes every run reproducible, so the component plugs directly into
 Wallacei, Colibri or Sobol sampling.
 
 </td>
+
 </tr>
 </table>
 
@@ -172,7 +181,7 @@ distance, growth step and iterations), **podium** (floors, offset range, floor
 height), **courtyard** (count, break width, split angle, layout mode) and
 **positioning** (snap to boundary, snap to setback, edge alignment).
 
-See [Components](components.md) for the full input and output reference.
+See [Components](https://trongtintr.github.io/UrbGEN/components/UrbGENgenerator/) for the full input and output reference.
 
 ![Height-coloured output across four seeds](images/urbgen-height-seeds.png)
 
@@ -208,25 +217,44 @@ Sample files are provided in the `UrbGEN_example` folder of the repository.
 <tr>
 <td width="33%" valign="top">
 
-### [Installation](installation.md)
+<b>Installation</b><br><br>
 
-Install through the Rhino Package Manager, the Yak CLI, or by dropping the
-`.gha` file into the Grasshopper components folder.
+<a href="https://rhinopackages.github.io/?owner=17087&search=urbgen&p=UrbGEN">
+Install UrbGEN
+</a>
+
+<br><br>
+
+Install through the Rhino Package Manager, Yak CLI, or by dropping the
+<code>.gha</code> file into the Grasshopper components folder.
 
 </td>
+
 <td width="33%" valign="top">
 
-### [Components](components.md)
+<b>Components</b><br><br>
 
-Reference for every input and output of the two UrbGEN components.
+<a href="https://trongtintr.github.io/UrbGEN/components/UrbGENgenerator/">
+View Documentation
+</a>
+
+<br><br>
+
+Reference for every input and output of the UrbGEN components.
 
 </td>
+
 <td width="33%" valign="top">
 
-### [Examples](examples.md)
+<b>Examples</b><br><br>
 
-Grasshopper definitions covering single-site, multi-site and design-space
-workflows.
+<a href="https://github.com/trongtintr/UrbGEN/tree/main/UrbGEN_example/UrbGEN_example">
+View Examples
+</a>
+
+<br><br>
+
+Grasshopper definitions covering single-site, multi-site, and design-space workflows.
 
 </td>
 </tr>
