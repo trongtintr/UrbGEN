@@ -21,7 +21,7 @@ Email: trongtintr@outlook.com
 theme:
   name: material
   palette:
-    scheme: slate
+    scheme: default
     primary: indigo
     accent: deep orange
   features:
