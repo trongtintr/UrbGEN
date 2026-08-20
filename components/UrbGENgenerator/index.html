@@ -1,0 +1,1469 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="UrbGEN — Generative Urban Massing Tool
+
+UrbGEN is a GhPython-based generative urban massing tool for Grasshopper/Rhino that automatically generates 3D building configurations from site boundaries and planning constraints. The tool enables rapid exploration of seven building typologies while targeting Building Coverage Ratio (BCR), Floor Area Ratio (FAR), building height, orientation,... requirements, supporting early-stage urban design and design-space exploration.
+
+Developed by: Trong-Tin Tran, Ying-Chieh Chan
+Lab: Ying-Chieh Chan's Lab, National Taiwan University
+Email: trongtintr@outlook.com
+
+
+
+
+
+
+">
+      
+      
+        <meta name="author" content="Trong-Tin Tran, Ying-Chieh Chan">
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../UrbGENPopulateRegion/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>UrbGEN generator - UrbGEN Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#urbgen-generator" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="UrbGEN Documentation" class="md-header__button md-logo" aria-label="UrbGEN Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            UrbGEN Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              UrbGEN generator
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="UrbGEN Documentation" class="md-nav__button md-logo" aria-label="UrbGEN Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    UrbGEN Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Components
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Components
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UrbGEN
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    UrbGEN
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UrbGEN generator
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UrbGEN generator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../UrbGENPopulateRegion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UrbGEN_PopulateRegion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outputs
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="urbgen-generator">UrbGEN generator</h1>
+<p><strong>Nickname:</strong> UrbGEN generator<br />
+<strong>Location:</strong> UrbGEN &gt; UrbGEN  </p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMlSURBVEhLpZZNSBRhGMf/73zvri7S+hUYIuohsQ3aDD0tCNpCUR3cugTSoc2Z2RUj3aTQ2RUTCkGkD+gmRZftFuGhi6wFXYKojh4ib522OkiBzBvP7EzpuppjLzyzzC7z/J7n//7fZxYAFAAiABWADEBKpSBv5DD8cxoTB42NOQzH49DQ2gptIIqQm5w+Fc4h2HmUbAsb9hRKvoOezaO0mICKeANqBAFv6kI45nYjOYAcSps53OQWJN+xAo1ADmCoBQEAPBxEwpVKTiah/JrBwtdJ5zvqbM81Pz9fb1mWxjkX6J4XoOwABFUMEqC3BQFVxL2BAYRayr/R3uy5xsfHE4ZhlHRdv5/NZnv5SnxnBx4g3gqN7iMBnANAFUmVCSvX2NjYoK7rnCKTyay+exwL/gGcPYzgFoDkAcKqI49vgGEY2wHJLtS4gNOkd8wF/gtAehcKBcWyLGlPAHlVYPhUF8QZSrhfACUmOUzTLBqG8dQ0zeoASiCLeKiIeGRZEIZ6XVeVAeSgqptMAErmVb5rBwTobkQTY/imScie6EA7AWoVpyPqhqy7Y/kC0CUcwCnG8J2SOy5S0Q+gsTKx53XfANL7SAPaZRGzQRUL3W1oogO3LXvZ833pdPoSHSw/AOaOCXQ0o0EW8YAxlGQRd+PxcgFU+cjIyAQloQ1Np9OfdV2n2BeANpOFwzgkMHxgDB8Zw7rA8DrZRcOPC6Ojo5OeU7yovN8NQBenSpnhDmN4mUlA7Yui8UIPIokEVAIYhjFbmaxakHWXFxPhrQByimQloZAsLSF0kyx0shnDF7KtHwB1dT0zUrSn2DaA6I4KHj+OOk3Cbc9NqRiCfgAUGfMat3N/AXSwBHdc88tRhCIBnA8FYNLZSMUgHwiwpQOaRSQJzSIHQLqrMuYUCc8seoH4BIxW6UCpL88i3hRBv6ZgUhTw48lFXPEs6gdQ2QFZVGmrQ9TTnaR5exXr9gxe2DncsPPS+Ptbnc+XsyfX9hOvsj1rlQCaqlKthmGqvrMZR7mFJTuPoj1FwYr2NFvd9BF8li15AHrB0EBzIhZzgCL9dfnfIGV+A7UEw3lc2rnTAAAAAElFTkSuQmCC" alt="UrbGEN generator Icon" width="24" height="24"></p>
+<hr />
+<h2 id="description">Description</h2>
+<p>UrbGEN generator component</p>
+<h2 id="inputs">Inputs</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IIIIISITEandPLANNINGTARGET</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Site &amp; Planning Targets group (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>siteCrv</strong></td>
+<td><code>Curve</code></td>
+<td>list</td>
+<td>Closed planar site boundary curve. All geometry is generated inside this outline. Must be closed, planar and lie on the WorldXY plane. (Optional)</td>
+</tr>
+<tr>
+<td><strong>centroids</strong></td>
+<td><code>Point</code></td>
+<td>tree</td>
+<td>Candidate seed points for tower placement. Points outside the setback line are discarded. Ignored entirely when towerTypologyMode = 7 (Courtyard), which derives its layout from the site outline instead. (Optional)</td>
+</tr>
+<tr>
+<td><strong>setback</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Setback distance (m) offset inward from the site boundary. Defines the buildable area; every footprint must sit fully inside it. If the offset fails, the full site boundary is used instead. (Optional)</td>
+</tr>
+<tr>
+<td><strong>FAR</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Target Floor Area Ratio. Total GFA (podium + towers) divided by site area. Drives the number of floors assigned to each tower</td>
+</tr>
+<tr>
+<td>4=400%</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5=500% (Optional)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>BCR</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Target Building Coverage Ratio (0–1). Total ground footprint area divided by site area. Reached in two stages: tower growth first, then podium expansion.</td>
+</tr>
+<tr>
+<td>0.3 = 30%</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0.6 = 60% (Optional)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>upperBCR</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Converts to collection of floating point numbers (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>IIIIIIIIIIIIIIIIIISIZINGandDENSITY</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Tower Sizing &amp; Density group (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>minWidth</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Base width (m) of every tower slab, i.e. the short side of the spine rectangle. Also the fixed band width for Courtyard typology. Values below 2.0 m are clamped. (Optional)</td>
+</tr>
+<tr>
+<td><strong>towerSizeMode</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Footprint size strategy. 0 = Compact (small footprints, skewed low), 1 = Medium (mid range), 2 = Maximized (large footprints, skewed high), 3 = Random uniform. For Courtyard typology this instead controls break-point density and building length on the ring. (Optional)</td>
+</tr>
+<tr>
+<td><strong>minFootprintPerTower</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Minimum allowed footprint area (m²) per tower. Candidates below this are rejected during placement. Minimum 20 m². (Optional)</td>
+</tr>
+<tr>
+<td><strong>maxFootprintPerTower</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Maximum allowed footprint area (m²) per tower, including all attached arm modules. Caps spine length growth. Forced to be at least minFootprintPerTower + 30. (Optional)</td>
+</tr>
+<tr>
+<td><strong>maxLengthWidthRatio</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Maximum slenderness of a tower: spine length ÷ width. Prevents excessively elongated slabs. Minimum 2.0. (Optional)</td>
+</tr>
+<tr>
+<td><strong>minTowerDistance</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Minimum clear distance (m) between any two building footprints. Enforced during placement, growth, rotation and all move operations. (Optional)</td>
+</tr>
+<tr>
+<td><strong>towerBCRPriority</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Share of the BCR target (0–1) to be carried by tower footprints before the podium is generated. Higher = taller/thicker towers and a thinner podium; lower = a larger podium skirt. (Optional)</td>
+</tr>
+<tr>
+<td><strong>towerGrowStep</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Length increment (m) added to a tower's spine per growth attempt while converging on the tower BCR target. Smaller = finer convergence but slower. (Optional)</td>
+</tr>
+<tr>
+<td><strong>towerGrowIterations</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>towerGrowIterations (Optional)</td>
+</tr>
+<tr>
+<td><strong>seed</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Random seed controlling point ordering, rotation angles, size sampling, podium noise and height distribution. Same seed = identical result. Taken modulo 10000. (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIITYPOLOGY</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Building Typology group (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>towerTypologyMode</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Building footprint shape. 0 = I (plain rectangle), 1 = L, 2 = T, 3 = H, 4 = C/U, 5 = Plus (+), 6 = Random per tower (picks 0–5), 7 = Courtyard (perimeter ring blocks; uses the site outline instead of centroids). (Optional)</td>
+</tr>
+<tr>
+<td><strong>armLengthRatio</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Length of each attached arm module as a multiple of minWidth. Only affects typologies 1–5. Auto-tuned by ±30% if the tower BCR target is missed. Minimum 0.3. (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIPODIUM</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Podium group (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>podiumFloors</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Number of podium floors. Podium height = podiumFloors × floorHeight. Towers are extruded starting from the top of the podium. (Optional)</td>
+</tr>
+<tr>
+<td><strong>podiumMinOffset</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Lower bound (m) for the podium offset search. The podium is the tower footprints offset outward by this distance, unioned, then clipped to the setback line. (Optional)</td>
+</tr>
+<tr>
+<td><strong>podiumMaxOffset</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Upper bound (m) for the podium offset search. Additionally capped at 35% of √(site area). Forced to be at least podiumMinOffset + 0.5. (Optional)</td>
+</tr>
+<tr>
+<td><strong>floorHeight</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Floor-to-floor height (m), used for both podium and tower floors. Converts floor counts into metric heights. (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIROTATION</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Rotation group (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>globalRotationMode</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Rotation strategy. 0 = per-tower random angle from a candidate set, 1 = uniform fixed angle for all towers (uses uniformRotationDeg), 2 or 3 = one randomly chosen angle from 0/45/90/135/180 applied to all towers. (Optional)</td>
+</tr>
+<tr>
+<td><strong>uniformRotationDeg</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Rotation angle in degrees applied to every tower when globalRotationMode = 1. Ignored in all other modes. Clamped 0–180. (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>IIIIIIIIIIIIIIIIIIIIIIIIIIIICOURTYARD</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Courtyard setting group (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>courtyardCount</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Number of separate courtyard zones the site is split into. Each zone produces its own ring of perimeter buildings around an open central void. Minimum 1. (Optional)</td>
+</tr>
+<tr>
+<td><strong>courtyardBreakCount</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Base number of gaps cut into each courtyard ring. Adjusted by towerSizeMode: Compact adds gaps (more, shorter blocks), Maximized removes them (fewer, longer blocks). (Optional)</td>
+</tr>
+<tr>
+<td><strong>courtyardBreakWidth</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Converts to collection of floating point numbers (Optional)</td>
+</tr>
+<tr>
+<td><strong>courtyardZoneGap</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Clear distance (m) left between adjacent courtyard zones so separate rings never touch. Only applies when courtyardCount &gt; 1. (Optional)</td>
+</tr>
+<tr>
+<td><strong>courtyardSplitAngle</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Rotation (degrees) of the zone-splitting axis relative to the site's longer bounding-box axis. 0 = split strictly along that axis. Clamped −45 to +45. (Optional)</td>
+</tr>
+<tr>
+<td><strong>courtyardBreakShift</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Distance (m) to shift break/cluster positions clockwise along the ring perimeter; wraps around. Used in Cluster layout and in the smooth-boundary fallback of Corner layout. (Optional)</td>
+</tr>
+<tr>
+<td><strong>courtyardLayoutMode</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Ring layout strategy. 0 = Corner: one building anchored at each polygon corner growing outward along both edges, gaps land mid-edge (courtyardBreakShift ignored). 1 = Cluster: all buildings grouped into one contiguous run separated by courtyardBreakWidth, shifted around the ring by courtyardBreakShift. (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>IIIIIIIIHEIGHTandREGULATION</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>heightVariation</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Converts to collection of floating point numbers (Optional)</td>
+</tr>
+<tr>
+<td><strong>enforceHeightRegulation</strong></td>
+<td><code>Boolean</code></td>
+<td>list</td>
+<td>Converts to collection of boolean values (Optional)</td>
+</tr>
+<tr>
+<td><strong>heightRegulationMode</strong></td>
+<td><code>Integer</code></td>
+<td>list</td>
+<td>Converts to collection of integer numbers (Optional)</td>
+</tr>
+<tr>
+<td><strong>maxBuildingHeight</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Converts to collection of floating point numbers (Optional)</td>
+</tr>
+<tr>
+<td><strong>minBuildingHeight</strong></td>
+<td><code>Number</code></td>
+<td>list</td>
+<td>Converts to collection of floating point numbers (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>IIIIIIIIIIIIIIIIIIIIIIIIIIPOSITIONING</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Post-Placement Positioning Group (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>moveToBoundary</strong></td>
+<td><code>Boolean</code></td>
+<td>list</td>
+<td>Push each tower outward along the direction from the site centroid through the tower, until it reaches the setback line or is blocked by another building. Radial spread; creates an open centre. Skipped for Courtyard typology. (Optional)</td>
+</tr>
+<tr>
+<td><strong>moveAllToSetback</strong></td>
+<td><code>Boolean</code></td>
+<td>list</td>
+<td>Push every building along the shortest (perpendicular) direction to the nearest point on the setback line, rather than radially from the centre. Produces buildings hugging the site edges. Skipped for Courtyard typology. (Optional)</td>
+</tr>
+<tr>
+<td><strong>alignTowersToEdge</strong></td>
+<td><code>Boolean</code></td>
+<td>list</td>
+<td>Rotate each building in place, centre unchanged, so it lines up with the nearest boundary edge. Applied both at initial placement and again after the move steps, so alignment reflects each tower's final position. Skipped for Courtyard typology, which already follows the boundary. (Optional)</td>
+</tr>
+<tr>
+<td><strong>edgeAlignBothOrientations</strong></td>
+<td><code>Boolean</code></td>
+<td>list</td>
+<td>Fallback behaviour for edge alignment. True = if the long-edge-parallel rotation is blocked (leaves the site, overlaps, or breaks minTowerDistance), try the perpendicular orientation instead. False = only attempt the parallel orientation, otherwise keep the existing angle. Long-edge alignment is always attempted for every building before any short-edge fallback. (Optional)</td>
+</tr>
+<tr>
+<td><strong>moveTowerToPodiumEdge</strong></td>
+<td><code>Boolean</code></td>
+<td>list</td>
+<td>After the podium is built, slide each tower inside its own podium footprint toward the podium edge nearest the setback line, without changing the podium shape. Result: the tower sits flush on the street side while the podium stays wider behind it. Requires podium offset &gt; 0. (Optional)</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry (Optional)</td>
+</tr>
+<tr>
+<td><strong>Run</strong></td>
+<td><code>Boolean</code></td>
+<td>item</td>
+<td>Converts to collection of boolean values (Optional)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="outputs">Outputs</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Access</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>TowerFootprints</strong></td>
+<td><code>Curve</code></td>
+<td>item</td>
+<td>Ground footprint curve of each tower/block</td>
+</tr>
+<tr>
+<td><strong>TowerMasses</strong></td>
+<td><code>Brep</code></td>
+<td>item</td>
+<td>3D tower solids, extruded from the podium top level</td>
+</tr>
+<tr>
+<td><strong>PodiumFootprints</strong></td>
+<td><code>Curve</code></td>
+<td>item</td>
+<td>Podium outlines after boolean union and clipping to the setback line</td>
+</tr>
+<tr>
+<td><strong>PodiumMasses</strong></td>
+<td><code>Brep</code></td>
+<td>item</td>
+<td>3D podium solids</td>
+</tr>
+<tr>
+<td><strong>UnionFootprint</strong></td>
+<td><code>Curve</code></td>
+<td>item</td>
+<td>Alias of PodiumFootprints (total covered area)</td>
+</tr>
+<tr>
+<td><strong>BuildableSite</strong></td>
+<td><code>Curve</code></td>
+<td>item</td>
+<td>Site boundary after applying setback</td>
+</tr>
+<tr>
+<td><strong>siteOriginal</strong></td>
+<td><code>Curve</code></td>
+<td>item</td>
+<td>The original input site boundary</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>TowerCentroids</strong></td>
+<td><code>Point</code></td>
+<td>item</td>
+<td>Final centres after all move operations</td>
+</tr>
+<tr>
+<td><strong>TowerAngles</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Final rotation angle (degrees) after the align step</td>
+</tr>
+<tr>
+<td><strong>TowerTypologies</strong></td>
+<td><code>Integer</code></td>
+<td>item</td>
+<td>Typology code 0–7</td>
+</tr>
+<tr>
+<td><strong>TowerTypologyNames</strong></td>
+<td><code>Text</code></td>
+<td>item</td>
+<td>Typology name: I / L / T / H / C / Plus / Courtyard</td>
+</tr>
+<tr>
+<td><strong>TowerLengthUsed</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Actual spine length used per tower</td>
+</tr>
+<tr>
+<td><strong>TowerWidthUsed</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Slab width (= clamped minWidth)</td>
+</tr>
+<tr>
+<td><strong>TowerSizeRatio</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Length / width ratio per tower</td>
+</tr>
+<tr>
+<td><strong>NumTowers</strong></td>
+<td><code>Integer</code></td>
+<td>item</td>
+<td>Final tower/block count</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>ActualFAR</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>FAR_Error</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>ActualBCR</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>BCR_Error</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>TotalGFA</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>TowerGFA</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>PodiumGFA</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>TowerTotalArea</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Total ground area covered by towers</td>
+</tr>
+<tr>
+<td><strong>UnionArea</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Total covered area and its coverage ratio</td>
+</tr>
+<tr>
+<td><strong>UnionBCR</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Total covered area and its coverage ratio</td>
+</tr>
+<tr>
+<td><strong>TowerCoverageRatio</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Share of the target BCR area achieved</td>
+</tr>
+<tr>
+<td><strong>PodiumCoverageRatio</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Share of the target BCR area achieved</td>
+</tr>
+<tr>
+<td><strong>TowerAreaPercentOfSite</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Share of the site area covered</td>
+</tr>
+<tr>
+<td><strong>PodiumAreaPercentOfSite</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Share of the site area covered</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>PodiumOffset</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>ActualPodiumOffset</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>PodiumThicknessAvg</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>PodiumAreaExpansionRatio</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>TowerToPodiumRatio</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>AdditionalPodiumArea</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>AdditionalPodiumRatio</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>AdditionalPodiumPercentOfSite</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>PodiumEfficiency</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>Floors</strong></td>
+<td><code>Integer</code></td>
+<td>item</td>
+<td>Converts to collection of integer numbers</td>
+</tr>
+<tr>
+<td><strong>TowerFloors</strong></td>
+<td><code>Integer</code></td>
+<td>item</td>
+<td>Converts to collection of integer numbers</td>
+</tr>
+<tr>
+<td><strong>TotalFloors</strong></td>
+<td><code>Integer</code></td>
+<td>item</td>
+<td>Converts to collection of integer numbers</td>
+</tr>
+<tr>
+<td><strong>Heights</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>TowerHeights</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>TotalBuildingHeights</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Total height including the podium</td>
+</tr>
+<tr>
+<td><strong>ActualHeightVariation</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>HeightVariationError</strong></td>
+<td><code>Number</code></td>
+<td>item</td>
+<td>Converts to collection of floating point numbers</td>
+</tr>
+<tr>
+<td><strong>HeightBins</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>HeightCounts</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>HeightVariationOutputs</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>Full bundle: min/max/avg, StdDev, CV, Q1/Median/Q3/IQR, per-tower HeightDetails</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>HeightRegulationEnforced</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>HeightRegulationMode</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>MaxAllowedHeight</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>MinAllowedHeight</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>HeightViolationsCount</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>HeightAdjustedCount</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>HeightViolations</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong><strong><em>_</em></strong>____</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+<tr>
+<td><strong>SeedUsed</strong></td>
+<td><code>Generic Data</code></td>
+<td>item</td>
+<td>rhinoscriptsyntax geometry</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
