@@ -1,0 +1,41 @@
+site_name: UrbGEN Documentation
+site_description: "UrbGEN — Generative Urban Massing Tool
+
+
+UrbGEN is a GhPython-based generative urban massing tool for Grasshopper/Rhino that automatically generates 3D building configurations from site boundaries and planning constraints. The tool enables rapid exploration of seven building typologies while targeting Building Coverage Ratio (BCR), Floor Area Ratio (FAR), building height, orientation,... requirements, supporting early-stage urban design and design-space exploration.
+
+
+Developed by: Trong-Tin Tran, Ying-Chieh Chan
+
+Lab: Ying-Chieh Chan's Lab, National Taiwan University
+
+Email: trongtintr@outlook.com
+
+
+
+
+
+
+
+"
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: indigo
+    accent: deep orange
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - toc.follow
+site_author: Trong-Tin Tran, Ying-Chieh Chan
+
+docs_dir: 'docs'
+
+nav:
+  - Home: index.md
+  - Components:
+      - UrbGEN:
+          - UrbGEN generator: components/UrbGENgenerator.md
+          - UrbGEN_PopulateRegion: components/UrbGENPopulateRegion.md
