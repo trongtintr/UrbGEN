@@ -36,7 +36,7 @@ namespace RhinoCodePlatform.Rhino3D.Projects.Plugin.GH
     public override Guid Id { get; } = new Guid("7120f040-503b-40c2-a2cb-3e62e407cde1");
 
     public override string AssemblyName { get; } = "UrbGEN.Components";
-    public override string AssemblyVersion { get; } = "0.1.3.74";
+    public override string AssemblyVersion { get; } = "0.1.4.39946";
     public override string AssemblyDescription { get; } = @"URBGEN is a generative urban design tool for automatically generating building configurations under urban planning constraints such as Building Coverage Ratio (BCR), Floor Area Ratio (FAR), building height, orientation, and building typology.";
     public override string AuthorName { get; } = "Trong-Tin Tran, Ying Chieh Chan";
     public override string AuthorContact { get; } = "trongtintr@outlook.com";

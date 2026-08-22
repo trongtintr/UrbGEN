@@ -1,7 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{7120f040-503b-40c2-a2cb-3e62e407cde1}") = "UrbGEN.Components", "UrbGEN.Components\UrbGEN.Components.csproj", "{b86b956f-1c5b-4cce-82a2-fb49547f907b}"
+Project("{7120f040-503b-40c2-a2cb-3e62e407cde1}") = "UrbGEN.Components", "UrbGEN.Components\UrbGEN.Components.csproj", "{1824be42-84c5-40d5-8831-8b57801f9005}"
 EndProject
 
 Global
@@ -10,9 +10,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{b86b956f-1c5b-4cce-82a2-fb49547f907b}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{b86b956f-1c5b-4cce-82a2-fb49547f907b}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{b86b956f-1c5b-4cce-82a2-fb49547f907b}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{b86b956f-1c5b-4cce-82a2-fb49547f907b}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1824be42-84c5-40d5-8831-8b57801f9005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1824be42-84c5-40d5-8831-8b57801f9005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1824be42-84c5-40d5-8831-8b57801f9005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1824be42-84c5-40d5-8831-8b57801f9005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
