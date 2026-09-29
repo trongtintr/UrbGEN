@@ -9,19 +9,27 @@
 ## Description
 UrbGEN_PopulateRegion component
 
+Populates a closed planar region with points, with holes excluded. The run type is set automatically by the inputs:
+
+- **By count** (`Count` > 0): places the requested number of points and keeps the selected `Mode`. Grid modes solve the spacing to match `Count` within ±2%. `MinDist` is an optional minimum-spacing constraint.
+- **By distance** (`Count` empty or 0): the number of points follows from region area / `MinDist²`, so points are added or removed automatically when the boundary changes.
+
+Grid modes (1–3) are anchored to world XY, so existing points stay fixed while the boundary is edited. Point-in-region tests run on a pre-computed 2D polygon for speed.
+
 ## Inputs
 | Name | Type | Access | Description |
 |---|---|---|---|
-| **Crv** | `Curve` | item | Closed planar boundary (site outline). Open or non-planar curves return empty. (Optional) |
-| **Count** | `Integer` | item | Target number of points. In grid modes this is approximate — spacing is solved automatically to within ±2% (Optional) |
-| **Mode** | `Number` | item | 0 = Random · 1 = Regular grid · 2 = Jittered grid · 3 = Staggered grid (triangular). Default 0 (Optional) |
-| **Jitter** | `Number` | item | Converts to collection of floating point numbers (Optional) |
-| **Angle** | `Generic Data` | item | Grid rotation about the curve plane's Z axis, in radians. Modes 1–3 only. Use a Degrees→Radians component if working in degrees. (Optional) |
-| **Seed** | `Integer` | item | Random seed. Same seed → same result. Affects Mode 0 and 2 only. Default 0. (Optional) |
-| **MinDist** | `Number` | item | (Optional) Minimum spacing between points (model units). Mode 0 only. Set around 0.55·√(A/Count); above 0.7·√(A/Count) the count will fall short. Leave empty to disable. (Optional) |
-| **Holes** | `Curve` | list | Closed inner curves to exclude (courtyards, existing blocks, easements). Subtracted from area when solving grid spacing. (Optional) |
+| **Crv** | `Curve` | item | Closed planar boundary (site outline). Points are placed strictly inside it. Open or non-planar curves return empty. |
+| **Count** | `Integer` | item | Target number of points. > 0 runs **by count**: `Mode` is kept, and grid modes solve the spacing to match `Count` (±2%), then trim to exact. Empty or 0 runs **by distance** (requires `MinDist`). (Optional) |
+| **Mode** | `Integer` | item | 0 = Random (by count) / Poisson disk (by distance) · 1 = Regular grid · 2 = Jittered grid · 3 = Staggered grid (hexagonal). Modes 1–3 are anchored to world XY. Default 0. (Optional) |
+| **Jitter** | `Number` | item | Random offset strength, Mode 2 only. Range 0–0.9: 0 = regular grid, 0.9 = very irregular. When `MinDist` is set, the step is enlarged to `MinDist / (1 − Jitter)` so `MinDist` still holds. Default 0. (Optional) |
+| **Angle** | `Number` | item | Pattern rotation about the curve plane's Z axis, in radians. Aligns grid rows with a street or site edge. Use a Degrees→Radians component if working in degrees. Default 0. (Optional) |
+| **Seed** | `Integer` | item | Random seed. Same seed and inputs give the same result. Affects Mode 0 layout and Mode 2 offsets. Default 0. (Optional) |
+| **MinDist** | `Number` | item | Minimum distance between points (model units). **By distance:** required, sets the spacing and density. **By count:** optional constraint. Mode 0 rejects closer points, and Modes 1–3 use it as the smallest grid step. `Count` may fall short if it is set too large. |
+| **Holes** | `Curve` | list | Closed inner curves to exclude (courtyards, existing blocks, easements). Also subtracted from the area when solving grid spacing. (Optional) |
 
 ## Outputs
 | Name | Type | Access | Description |
 |---|---|---|---|
-| **Pts** | `Generic Data` | item | Points inside the boundary. Ordered by grid row (Modes 1–3) or by generation order (Mode 0). |
+| **Pts** | `Point` | list | Points inside the region. Ordered by grid row (Modes 1–3) or by generation order (Mode 0). |
+| **Info** | `Text` | item | Summary in the form run type \| mode \| points placed / target \| spacing, or an error message. |

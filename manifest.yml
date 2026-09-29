@@ -1,6 +1,6 @@
 ---
 name: UrbGEN
-version: 0.1.4-beta+39946
+version: 00.1.11-beta+16327
 authors:
 - Trong-Tin Tran, Ying Chieh Chan
 description: URBGEN is a generative urban design tool for automatically generating building configurations under urban planning constraints such as Building Coverage Ratio (BCR), Floor Area Ratio (FAR), building height, orientation, and building typology.
