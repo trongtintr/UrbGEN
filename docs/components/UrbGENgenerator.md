@@ -1,152 +1,147 @@
-# UrbGEN generator
-**Nickname:** UrbGEN generator  
-**Location:** UrbGEN > UrbGEN  
+# UrbGEN Massing Generator
 
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMlSURBVEhLpZZNSBRhGMf/73zvri7S+hUYIuohsQ3aDD0tCNpCUR3cugTSoc2Z2RUj3aTQ2RUTCkGkD+gmRZftFuGhi6wFXYKojh4ib522OkiBzBvP7EzpuppjLzyzzC7z/J7n//7fZxYAFAAiABWADEBKpSBv5DD8cxoTB42NOQzH49DQ2gptIIqQm5w+Fc4h2HmUbAsb9hRKvoOezaO0mICKeANqBAFv6kI45nYjOYAcSps53OQWJN+xAo1ADmCoBQEAPBxEwpVKTiah/JrBwtdJ5zvqbM81Pz9fb1mWxjkX6J4XoOwABFUMEqC3BQFVxL2BAYRayr/R3uy5xsfHE4ZhlHRdv5/NZnv5SnxnBx4g3gqN7iMBnANAFUmVCSvX2NjYoK7rnCKTyay+exwL/gGcPYzgFoDkAcKqI49vgGEY2wHJLtS4gNOkd8wF/gtAehcKBcWyLGlPAHlVYPhUF8QZSrhfACUmOUzTLBqG8dQ0zeoASiCLeKiIeGRZEIZ6XVeVAeSgqptMAErmVb5rBwTobkQTY/imScie6EA7AWoVpyPqhqy7Y/kC0CUcwCnG8J2SOy5S0Q+gsTKx53XfANL7SAPaZRGzQRUL3W1oogO3LXvZ833pdPoSHSw/AOaOCXQ0o0EW8YAxlGQRd+PxcgFU+cjIyAQloQ1Np9OfdV2n2BeANpOFwzgkMHxgDB8Zw7rA8DrZRcOPC6Ojo5OeU7yovN8NQBenSpnhDmN4mUlA7Yui8UIPIokEVAIYhjFbmaxakHWXFxPhrQByimQloZAsLSF0kyx0shnDF7KtHwB1dT0zUrSn2DaA6I4KHj+OOk3Cbc9NqRiCfgAUGfMat3N/AXSwBHdc88tRhCIBnA8FYNLZSMUgHwiwpQOaRSQJzSIHQLqrMuYUCc8seoH4BIxW6UCpL88i3hRBv6ZgUhTw48lFXPEs6gdQ2QFZVGmrQ9TTnaR5exXr9gxe2DncsPPS+Ptbnc+XsyfX9hOvsj1rlQCaqlKthmGqvrMZR7mFJTuPoj1FwYr2NFvd9BF8li15AHrB0EBzIhZzgCL9dfnfIGV+A7UEw3lc2rnTAAAAAElFTkSuQmCC" alt="UrbGEN generator Icon" width="24" height="24">
+![UrbGEN Massing Generator icon](../images/UrbGENgenerator_icon.png)
+
+- **Nickname:** UrbGEN Massing Generator
+- **Location:** UrbGEN > 2 | Massing
+- **Version:** 0.1.15-beta (see [CHANGELOG](https://github.com/trongtintr/UrbGEN/blob/main/CHANGELOG.md))
 
 ---
 
 ## Description
-UrbGEN generator component
+
+Generates podium + tower massing for one or many sites that meets target FAR, BCR, setback
+and height limits. Every site either returns a **fully constrained layout** or **fails**
+(`Success = False`, empty geometry, reason in `Errors`) — no fallback geometry is ever returned.
+
+**Pipeline (0.1.15):** buildable site (setback) → seed points → typology footprints →
+growth toward the tower share of BCR → adaptive arm length → **edge alignment (nearest edge
+first)** → move-to-boundary / move-to-setback → **BCR cascade** (tower rescale → podium offset
+solved to 0.4 % of the target area → tower growth if the podium saturates) → floors from FAR
+with height regulation → extrusion and metrics.
+
+Most numeric and boolean inputs accept a **per-site list**: one value per site, the last
+value repeats for the remaining sites.
 
 ## Inputs
+
 | Name | Type | Access | Description |
 |---|---|---|---|
-| **IIIIISITEandPLANNINGTARGET** | `Generic Data` | item | Site & Planning Targets group (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **siteCrv** | `Curve` | list | Closed planar site boundary curve. All geometry is generated inside this outline. Must be closed, planar and lie on the WorldXY plane. (Optional) |
-| **centroids** | `Point` | tree | Candidate seed points for tower placement. Points outside the setback line are discarded. Ignored entirely when towerTypologyMode = 7 (Courtyard), which derives its layout from the site outline instead. (Optional) |
-| **setback** | `Number` | list | Setback distance (m) offset inward from the site boundary. Defines the buildable area; every footprint must sit fully inside it. If the offset fails, the full site boundary is used instead. (Optional) |
-| **FAR** | `Number` | list | Target Floor Area Ratio. Total GFA (podium + towers) divided by site area. Drives the number of floors assigned to each tower
-4=400%
-5=500% (Optional) |
-| **BCR** | `Number` | list | Target Building Coverage Ratio (0–1). Total ground footprint area divided by site area. Reached in two stages: tower growth first, then podium expansion.
-0.3 = 30%
-0.6 = 60% (Optional) |
-| **upperBCR** | `Number` | list | Converts to collection of floating point numbers (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **IIIIIIIIIIIIIIIIIISIZINGandDENSITY** | `Generic Data` | item | Tower Sizing & Density group (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **minWidth** | `Number` | list | Base width (m) of every tower slab, i.e. the short side of the spine rectangle. Also the fixed band width for Courtyard typology. Values below 2.0 m are clamped. (Optional) |
-| **towerSizeMode** | `Integer` | list | Footprint size strategy. 0 = Compact (small footprints, skewed low), 1 = Medium (mid range), 2 = Maximized (large footprints, skewed high), 3 = Random uniform. For Courtyard typology this instead controls break-point density and building length on the ring. (Optional) |
-| **minFootprintPerTower** | `Number` | list | Minimum allowed footprint area (m²) per tower. Candidates below this are rejected during placement. Minimum 20 m². (Optional) |
-| **maxFootprintPerTower** | `Number` | list | Maximum allowed footprint area (m²) per tower, including all attached arm modules. Caps spine length growth. Forced to be at least minFootprintPerTower + 30. (Optional) |
-| **maxLengthWidthRatio** | `Number` | list | Maximum slenderness of a tower: spine length ÷ width. Prevents excessively elongated slabs. Minimum 2.0. (Optional) |
-| **minTowerDistance** | `Number` | list | Minimum clear distance (m) between any two building footprints. Enforced during placement, growth, rotation and all move operations. (Optional) |
-| **towerBCRPriority** | `Number` | list | Share of the BCR target (0–1) to be carried by tower footprints before the podium is generated. Higher = taller/thicker towers and a thinner podium; lower = a larger podium skirt. (Optional) |
-| **towerGrowStep** | `Number` | list | Length increment (m) added to a tower's spine per growth attempt while converging on the tower BCR target. Smaller = finer convergence but slower. (Optional) |
-| **towerGrowIterations** | `Integer` | list | towerGrowIterations (Optional) |
-| **seed** | `Integer` | list | Random seed controlling point ordering, rotation angles, size sampling, podium noise and height distribution. Same seed = identical result. Taken modulo 10000. (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIITYPOLOGY** | `Generic Data` | item | Building Typology group (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **towerTypologyMode** | `Integer` | list | Building footprint shape. 0 = I (plain rectangle), 1 = L, 2 = T, 3 = H, 4 = C/U, 5 = Plus (+), 6 = Random per tower (picks 0–5), 7 = Courtyard (perimeter ring blocks; uses the site outline instead of centroids). (Optional) |
-| **armLengthRatio** | `Number` | list | Length of each attached arm module as a multiple of minWidth. Only affects typologies 1–5. Auto-tuned by ±30% if the tower BCR target is missed. Minimum 0.3. (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIPODIUM** | `Generic Data` | item | Podium group (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **podiumFloors** | `Integer` | list | Number of podium floors. Podium height = podiumFloors × floorHeight. Towers are extruded starting from the top of the podium. (Optional) |
-| **podiumMinOffset** | `Number` | list | Lower bound (m) for the podium offset search. The podium is the tower footprints offset outward by this distance, unioned, then clipped to the setback line. (Optional) |
-| **podiumMaxOffset** | `Number` | list | Upper bound (m) for the podium offset search. Additionally capped at 35% of √(site area). Forced to be at least podiumMinOffset + 0.5. (Optional) |
-| **floorHeight** | `Number` | list | Floor-to-floor height (m), used for both podium and tower floors. Converts floor counts into metric heights. (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIROTATION** | `Generic Data` | item | Rotation group (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **globalRotationMode** | `Integer` | list | Rotation strategy. 0 = per-tower random angle from a candidate set, 1 = uniform fixed angle for all towers (uses uniformRotationDeg), 2 or 3 = one randomly chosen angle from 0/45/90/135/180 applied to all towers. (Optional) |
-| **uniformRotationDeg** | `Number` | list | Rotation angle in degrees applied to every tower when globalRotationMode = 1. Ignored in all other modes. Clamped 0–180. (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **IIIIIIIIIIIIIIIIIIIIIIIIIIIICOURTYARD** | `Generic Data` | item | Courtyard setting group (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **courtyardCount** | `Integer` | list | Number of separate courtyard zones the site is split into. Each zone produces its own ring of perimeter buildings around an open central void. Minimum 1. (Optional) |
-| **courtyardBreakCount** | `Integer` | list | Base number of gaps cut into each courtyard ring. Adjusted by towerSizeMode: Compact adds gaps (more, shorter blocks), Maximized removes them (fewer, longer blocks). (Optional) |
-| **courtyardBreakWidth** | `Number` | list | Converts to collection of floating point numbers (Optional) |
-| **courtyardZoneGap** | `Number` | list | Clear distance (m) left between adjacent courtyard zones so separate rings never touch. Only applies when courtyardCount > 1. (Optional) |
-| **courtyardSplitAngle** | `Number` | list | Rotation (degrees) of the zone-splitting axis relative to the site's longer bounding-box axis. 0 = split strictly along that axis. Clamped −45 to +45. (Optional) |
-| **courtyardBreakShift** | `Number` | list | Distance (m) to shift break/cluster positions clockwise along the ring perimeter; wraps around. Used in Cluster layout and in the smooth-boundary fallback of Corner layout. (Optional) |
-| **courtyardLayoutMode** | `Integer` | list | Ring layout strategy. 0 = Corner: one building anchored at each polygon corner growing outward along both edges, gaps land mid-edge (courtyardBreakShift ignored). 1 = Cluster: all buildings grouped into one contiguous run separated by courtyardBreakWidth, shifted around the ring by courtyardBreakShift. (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **IIIIIIIIHEIGHTandREGULATION** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **heightVariation** | `Number` | list | Converts to collection of floating point numbers (Optional) |
-| **enforceHeightRegulation** | `Boolean` | list | Converts to collection of boolean values (Optional) |
-| **heightRegulationMode** | `Integer` | list | Converts to collection of integer numbers (Optional) |
-| **maxBuildingHeight** | `Number` | list | Converts to collection of floating point numbers (Optional) |
-| **minBuildingHeight** | `Number` | list | Converts to collection of floating point numbers (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **IIIIIIIIIIIIIIIIIIIIIIIIIIPOSITIONING** | `Generic Data` | item | Post-Placement Positioning Group (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **moveToBoundary** | `Boolean` | list | Push each tower outward along the direction from the site centroid through the tower, until it reaches the setback line or is blocked by another building. Radial spread; creates an open centre. Skipped for Courtyard typology. (Optional) |
-| **moveAllToSetback** | `Boolean` | list | Push every building along the shortest (perpendicular) direction to the nearest point on the setback line, rather than radially from the centre. Produces buildings hugging the site edges. Skipped for Courtyard typology. (Optional) |
-| **alignTowersToEdge** | `Boolean` | list | Rotate each building in place, centre unchanged, so it lines up with the nearest boundary edge. Applied both at initial placement and again after the move steps, so alignment reflects each tower's final position. Skipped for Courtyard typology, which already follows the boundary. (Optional) |
-| **edgeAlignBothOrientations** | `Boolean` | list | Fallback behaviour for edge alignment. True = if the long-edge-parallel rotation is blocked (leaves the site, overlaps, or breaks minTowerDistance), try the perpendicular orientation instead. False = only attempt the parallel orientation, otherwise keep the existing angle. Long-edge alignment is always attempted for every building before any short-edge fallback. (Optional) |
-| **moveTowerToPodiumEdge** | `Boolean` | list | After the podium is built, slide each tower inside its own podium footprint toward the podium edge nearest the setback line, without changing the podium shape. Result: the tower sits flush on the street side while the podium stays wider behind it. Requires podium offset > 0. (Optional) |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry (Optional) |
-| **Run** | `Boolean` | item | Converts to collection of boolean values (Optional) |
+| ***Site & planning targets*** | | | |
+| **siteCrv** | `Curve` | list | Site boundary curve(s), closed and planar (List Access). One curve = one site. |
+| **centroids** | `Point` | tree | Tower seed points (Point3d). DataTree: one branch per site, or a flat list shared by all sites. Points outside the buildable area are dropped; if points are supplied but none lies inside, the site FAILS. With no points at all, the site centroid is used as the seed. Ignored when towerTypologyMode = 7 (Courtyard). |
+| **setback** | `Number` | list | Setback from the site boundary (m). Defines the buildable area. Default 5.0. If the setback cannot be applied (too large for the site) the site FAILS - there is no fallback to the full boundary. |
+| **FAR** | `Number` | list | Target Floor Area Ratio (total GFA / site area). Default 3.0. |
+| **BCR** | `Number` | list | Target Building Coverage Ratio (footprint / site area). Default 0.5. |
+| **upperBCR** | `Number` | list | Hard upper BCR limit: the BCR cascade never exceeds it (site fails instead). Default BCR x 1.1 (min BCR x 1.05). |
+| ***Sizing & density*** | | | |
+| **minWidth** | `Number` | list | Tower plate width / module depth (m). Also the courtyard band width. Default 12. |
+| **towerSizeMode** | `Integer` | list | Footprint size bias: 0 small, 1 medium, 2 large, 3 random. Default 1. |
+| **minFootprintPerTower** | `Number` | list | Minimum footprint per tower (sqm, >= 20). Default 80. |
+| **maxFootprintPerTower** | `Number` | list | Maximum footprint per tower (sqm, >= min + 30). Default 350. |
+| **maxLengthWidthRatio** | `Number` | list | Maximum spine length / width ratio of a tower (>= 2). Default 4. |
+| **minTowerDistance** | `Number` | list | Minimum clear distance between towers (m). Default 12. |
+| **towerBCRPriority** | `Number` | list | Share of the BCR target reached by tower footprints before the podium fills the rest (0-1). Default 0.65. |
+| **towerGrowStep** | `Number` | list | Length increment per growth step when growing towers to the BCR target (m). Default 1. |
+| **towerGrowIterations** | `Integer` | list | Maximum growth iterations (also caps courtyard coverage search). Default 80. |
+| **seed** | `Integer` | list | Random seed (0-9999). Same seed = same result. |
+| ***Typology*** | | | |
+| **towerTypologyMode** | `Integer` | list | Tower shape: 0 I, 1 L, 2 T, 3 H, 4 C, 5 Plus, 6 random mix, 7 Courtyard (perimeter blocks, centroids ignored). Default 0. |
+| **armLengthRatio** | `Number` | list | Arm length of L/T/H/C/Plus shapes as a multiple of minWidth (>= 0.3). Auto-adapted +/-30 % to hit BCR. Default 1.3. |
+| ***Podium*** | | | |
+| **podiumFloors** | `Integer` | list | Number of podium floors. Default 2. |
+| **podiumMinOffset** | `Number` | list | Minimum podium offset around each tower (m). Default 2. |
+| **podiumMaxOffset** | `Number` | list | Maximum podium offset around each tower (m). Default 15. Forced to be at least podiumMinOffset + 0.5. |
+| **floorHeight** | `Number` | list | Floor-to-floor height (m), used for podium and towers. Default 3.5. |
+| ***Rotation*** | | | |
+| **globalRotationMode** | `Integer` | list | Tower rotation: 0 free (best fit), 1 uniform angle (uniformRotationDeg), 2/3 one random angle from {0,45,90,135,180} for all towers. Default 0. |
+| **uniformRotationDeg** | `Number` | list | Rotation (deg, 0-180) used when globalRotationMode = 1. |
+| ***Courtyard*** | | | |
+| **courtyardCount** | `Integer` | list | [Courtyard] Number of zones the site is split into. Default 1. |
+| **courtyardBreakCount** | `Integer` | list | [Courtyard] Number of breaks (gaps) in each perimeter ring. Default 4. |
+| **courtyardBreakWidth** | `Number` | list | [Courtyard] Width of each break (m). Default max(1.5 x minWidth, 4). |
+| **courtyardZoneGap** | `Number` | list | [Courtyard] Gap between zones (m). Default max(minTowerDistance, minWidth). |
+| **courtyardSplitAngle** | `Number` | list | [Courtyard] Rotation of the zone split lines (deg, -45 to 45). Default 0. |
+| **courtyardBreakShift** | `Number` | list | [Courtyard] Shift of the break positions along the ring (m). Default 0. |
+| **courtyardLayoutMode** | `Integer` | list | [Courtyard] 0 = blocks anchored on corners, 1 = consecutive bands from the ring start. Default 0. |
+| ***Height & regulation*** | | | |
+| **heightVariation** | `Number` | list | Height variation between towers as a fraction of the base floor count (0 = all equal, 0.5 = range of 50 %). Default 0. |
+| **enforceHeightRegulation** | `Boolean` | list | True = apply heightRegulationMode. Default False. |
+| **heightRegulationMode** | `Integer` | list | 0 off, 1 strict (hard cap at maxBuildingHeight, FAR may fall short), 2 flexible (excess softened by 70 %). Default 0. |
+| **maxBuildingHeight** | `Number` | list | Maximum total building height incl. podium (m). Default 100. |
+| **minBuildingHeight** | `Number` | list | Minimum total building height incl. podium (m). Default 3. |
+| ***Positioning*** | | | |
+| **moveToBoundary** | `Boolean` | list | True = push towers outward from the site centroid toward the setback line. |
+| **moveAllToSetback** | `Boolean` | list | True = slide each tower along the normal of its nearest boundary edge until it is flush with the setback line (keeps the edge alignment). Skipped for Courtyard. |
+| **alignTowersToEdge** | `Boolean` | list | True = align every tower to the boundary edge it is CLOSEST to (nearest edge first, next-closest edge second). A tower that is blocked is slid inward, slid along the edge, or its spine is shortened (to >= 60 %, never below minFootprintPerTower) before a lower-priority orientation is tried. Runs before the move steps. Skipped for Courtyard. |
+| **edgeAlignBothOrientations** | `Boolean` | list | With alignTowersToEdge: priority order per tower = nearest edge parallel -> nearest edge perpendicular -> next edge parallel -> next edge perpendicular. False = parallel orientations only. Default True. |
+| **moveTowerToPodiumEdge** | `Boolean` | list | True = slide each tower to the outer edge of its own podium. |
+| **Run** | `Boolean` | item | Gate. True = solve. Per-site list allowed (False skips that site). |
 
 ## Outputs
+
 | Name | Type | Access | Description |
 |---|---|---|---|
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **TowerFootprints** | `Curve` | item | Ground footprint curve of each tower/block |
-| **TowerMasses** | `Brep` | item | 3D tower solids, extruded from the podium top level |
-| **PodiumFootprints** | `Curve` | item | Podium outlines after boolean union and clipping to the setback line |
-| **PodiumMasses** | `Brep` | item | 3D podium solids |
-| **UnionFootprint** | `Curve` | item | Alias of PodiumFootprints (total covered area) |
-| **BuildableSite** | `Curve` | item | Site boundary after applying setback |
-| **siteOriginal** | `Curve` | item | The original input site boundary |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **TowerCentroids** | `Point` | item | Final centres after all move operations |
-| **TowerAngles** | `Number` | item | Final rotation angle (degrees) after the align step |
-| **TowerTypologies** | `Integer` | item | Typology code 0–7 |
-| **TowerTypologyNames** | `Text` | item | Typology name: I / L / T / H / C / Plus / Courtyard |
-| **TowerLengthUsed** | `Number` | item | Actual spine length used per tower |
-| **TowerWidthUsed** | `Number` | item | Slab width (= clamped minWidth) |
-| **TowerSizeRatio** | `Number` | item | Length / width ratio per tower |
-| **NumTowers** | `Integer` | item | Final tower/block count |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **ActualFAR** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **FAR_Error** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **ActualBCR** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **BCR_Error** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **TotalGFA** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **TowerGFA** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **PodiumGFA** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **TowerTotalArea** | `Generic Data` | item | Total ground area covered by towers |
-| **UnionArea** | `Generic Data` | item | Total covered area and its coverage ratio |
-| **UnionBCR** | `Generic Data` | item | Total covered area and its coverage ratio |
-| **TowerCoverageRatio** | `Generic Data` | item | Share of the target BCR area achieved |
-| **PodiumCoverageRatio** | `Generic Data` | item | Share of the target BCR area achieved |
-| **TowerAreaPercentOfSite** | `Generic Data` | item | Share of the site area covered |
-| **PodiumAreaPercentOfSite** | `Generic Data` | item | Share of the site area covered |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **PodiumOffset** | `Number` | item | Converts to collection of floating point numbers |
-| **ActualPodiumOffset** | `Number` | item | Converts to collection of floating point numbers |
-| **PodiumThicknessAvg** | `Number` | item | Converts to collection of floating point numbers |
-| **PodiumAreaExpansionRatio** | `Number` | item | Converts to collection of floating point numbers |
-| **TowerToPodiumRatio** | `Number` | item | Converts to collection of floating point numbers |
-| **AdditionalPodiumArea** | `Number` | item | Converts to collection of floating point numbers |
-| **AdditionalPodiumRatio** | `Number` | item | Converts to collection of floating point numbers |
-| **AdditionalPodiumPercentOfSite** | `Number` | item | Converts to collection of floating point numbers |
-| **PodiumEfficiency** | `Number` | item | Converts to collection of floating point numbers |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **Floors** | `Integer` | item | Converts to collection of integer numbers |
-| **TowerFloors** | `Integer` | item | Converts to collection of integer numbers |
-| **TotalFloors** | `Integer` | item | Converts to collection of integer numbers |
-| **Heights** | `Number` | item | Converts to collection of floating point numbers |
-| **TowerHeights** | `Number` | item | Converts to collection of floating point numbers |
-| **TotalBuildingHeights** | `Number` | item | Total height including the podium |
-| **ActualHeightVariation** | `Number` | item | Converts to collection of floating point numbers |
-| **HeightVariationError** | `Number` | item | Converts to collection of floating point numbers |
-| **HeightBins** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **HeightCounts** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **HeightVariationOutputs** | `Generic Data` | item | Full bundle: min/max/avg, StdDev, CV, Q1/Median/Q3/IQR, per-tower HeightDetails |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **HeightRegulationEnforced** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **HeightRegulationMode** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **MaxAllowedHeight** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **MinAllowedHeight** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **HeightViolationsCount** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **HeightAdjustedCount** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **HeightViolations** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **________________________________** | `Generic Data` | item | rhinoscriptsyntax geometry |
-| **SeedUsed** | `Generic Data` | item | rhinoscriptsyntax geometry |
+| **TowerFootprints** | `Curve` | list / tree | Tower footprint curves. Tree: {site}. |
+| **TowerMasses** | `Brep` | list / tree | Tower 3D masses (Brep), sitting on top of the podium. Tree: {site}. |
+| **PodiumFootprints** | `Curve` | list / tree | Podium outline curves (clipped to the buildable area). Tree: {site}. |
+| **PodiumMasses** | `Brep` | list / tree | Podium 3D masses (Brep). Tree: {site}. |
+| **UnionFootprint** | `Curve` | list / tree | Alias of PodiumFootprints (total built footprint). Tree: {site}. |
+| **BuildableSite** | `Curve` | list / tree | Buildable area after setback, per site. |
+| **siteOriginal** | `Curve` | list / tree | Original site curves as received. |
+| **TowerCentroids** | `Point` | list / tree | Tower placement points after moves. Tree: {site}. |
+| **TowerAngles** | `Number` | list / tree | Tower rotation angles (deg). Tree: {site}. |
+| **TowerTypologies** | `Integer` | list / tree | Tower typology codes (0 I, 1 L, 2 T, 3 H, 4 C, 5 Plus, 7 Courtyard). Tree: {site}. |
+| **TowerTypologyNames** | `Text` | list / tree | Tower typology names. Tree: {site}. |
+| **TowerEdgeAngleError** | `Number` | list / tree | NEW 0.1.15. Deviation (deg) of each tower spine from its nearest boundary edge (0 = parallel; with edgeAlignBothOrientations also 0 = perpendicular; -1 = no edge). Tree: {site}. |
+| **TowerLengthUsed** | `Number` | list / tree | Not populated in 0.1.15 (always empty). |
+| **TowerWidthUsed** | `Number` | list / tree | Tower width used (m). |
+| **TowerSizeRatio** | `Number` | list / tree | Not populated in 0.1.15 (always empty). |
+| **NumTowers** | `Integer` | list / tree | Number of towers / buildings generated. |
+| **ActualFAR** | `Number` | list / tree | Achieved FAR. |
+| **FAR_Error** | `Number` | list / tree | /ActualFAR - target FAR/. |
+| **ActualBCR** | `Number` | list / tree | Achieved BCR (podium footprint / site area). |
+| **BCR_Error** | `Number` | list / tree | /ActualBCR - target BCR/. |
+| **TotalGFA** | `Number` | list / tree | PodiumGFA + TowerGFA (sqm). |
+| **TowerGFA** | `Number` | list / tree | Tower GFA = sum(tower area x floors) (sqm). |
+| **PodiumGFA** | `Number` | list / tree | Podium GFA = podium area x podiumFloors (sqm). |
+| **TowerTotalArea** | `Number` | list / tree | Sum of tower footprint areas (sqm). |
+| **UnionArea** | `Number` | list / tree | Area of the union footprint (sqm). |
+| **UnionBCR** | `Number` | list / tree | UnionArea / site area. |
+| **TowerCoverageRatio** | `Number` | list / tree | Tower footprint / site area. |
+| **PodiumCoverageRatio** | `Number` | list / tree | Podium footprint / site area. |
+| **TowerAreaPercentOfSite** | `Number` | list / tree | Tower footprint as % of site area. |
+| **PodiumAreaPercentOfSite** | `Number` | list / tree | Podium footprint as % of site area. |
+| **PodiumOffset** | `Number` | list / tree | Podium offset used (m). |
+| **ActualPodiumOffset** | `Number` | list / tree | Alias of PodiumOffset. |
+| **PodiumThicknessAvg** | `Number` | list / tree | Average podium ring thickness = additional area / tower perimeter (m). |
+| **PodiumAreaExpansionRatio** | `Number` | list / tree | Podium area / tower footprint area. |
+| **TowerToPodiumRatio** | `Number` | list / tree | Tower footprint area / podium area. |
+| **AdditionalPodiumArea** | `Number` | list / tree | Podium area beyond the tower footprints (sqm). |
+| **AdditionalPodiumRatio** | `Number` | list / tree | Additional podium area / tower footprint area. |
+| **AdditionalPodiumPercentOfSite** | `Number` | list / tree | Additional podium area as % of site area. |
+| **PodiumEfficiency** | `Number` | list / tree | Tower footprint / podium area (%). |
+| **Floors** | `Integer` | list / tree | Tower floors above the podium. Tree: {site}. |
+| **TowerFloors** | `Integer` | list / tree | Alias of Floors. |
+| **TotalFloors** | `Integer` | list / tree | Sum of tower floors. |
+| **Heights** | `Number` | list / tree | Tower heights above the podium (m). Tree: {site}. |
+| **TowerHeights** | `Number` | list / tree | Alias of Heights. |
+| **TotalBuildingHeights** | `Number` | list / tree | Podium + tower height per building (m). Tree: {site}. |
+| **ActualHeightVariation** | `Number` | list / tree | Achieved height variation (floor range / base floors). |
+| **HeightVariationError** | `Number` | list / tree | /ActualHeightVariation - heightVariation/. |
+| **HeightBins** | `Generic Data` | list / tree | Height histogram bin centres (m). Tree: {site}. |
+| **HeightCounts** | `Generic Data` | list / tree | Height histogram counts. Tree: {site}. |
+| **HeightVariationOutputs** | `Generic Data` | list / tree | Readable summary of the height variation check. |
+| **HeightRegulationEnforced** | `Boolean` | list / tree | Whether the height regulation was enforced. |
+| **HeightRegulationMode** | `Integer` | list / tree | Height regulation mode used (0 off, 1 strict, 2 flexible). |
+| **MaxAllowedHeight** | `Number` | list / tree | maxBuildingHeight input per site (m). |
+| **MinAllowedHeight** | `Number` | list / tree | minBuildingHeight input per site (m). |
+| **HeightViolationsCount** | `Integer` | list / tree | Towers that violated the height limits before adjustment. |
+| **HeightAdjustedCount** | `Integer` | list / tree | Towers adjusted by the height regulation. |
+| **HeightViolations** | `Generic Data` | list / tree | Violation details per tower. Tree: {site}. |
+| **SeedUsed** | `Integer` | list / tree | Seed used. |
+| **SchemeTag** | `Text` | list / tree | Scheme label per site: target vs actual FAR / BCR and signed error (actual - target), 3 decimals. Ready for a Text Tag. |
+| **Report** | `Text` | list / tree | Text log per site. |
+| **Success** | `Boolean` | list / tree | True if the site produced a fully constrained layout. False = the site failed: no geometry is returned and the reason is in Errors (0.1.15 never returns fallback geometry). |
+| **Errors** | `Text` | list / tree | Error message per site (empty if OK). |
+| **Timings** | `Text` | list / tree | Per-stage solve time per site (ms). |

@@ -22,8 +22,6 @@ Lab: Ying-Chieh Chan's Lab, Department of Civil Engineering, National Taiwan Uni
 
 Email: trongtintr@outlook.com | D14521024@ntu.edu.tw
 
-# UrbGEN
-
 ## What is UrbGEN?
 
 UrbGEN is a GhPython-based generative urban massing tool for Grasshopper / Rhino
@@ -39,6 +37,20 @@ resolves a family of valid configurations that satisfy it.
 ![UrbGEN generated massing across multiple sites](images/urbgen-generative.gif)
 
 *Massing generated across eleven sites, coloured by building height.*
+
+---
+
+## What's new in 0.1.15
+
+- **No fallback geometry** — a site either returns a fully constrained layout or fails
+  with a reason in `Errors`.
+- **Nearest-edge alignment** — each building aligns to the boundary edge it is closest to.
+  New output `TowerEdgeAngleError`.
+- **Tighter BCR** — the podium offset is solved to 0.4 % of the target area;
+  `upperBCR` is a hard ceiling.
+- **~1.5–1.9× faster** generation. Requires Rhino 8.
+
+Full release notes: [CHANGELOG](https://github.com/trongtintr/UrbGEN/blob/main/CHANGELOG.md).
 
 ---
 
@@ -130,8 +142,9 @@ Wallacei, Colibri or Sobol sampling.
 ## How it works
 
 The component takes a site curve and a set of planning targets, grows building
-footprints iteratively until the coverage and plot-ratio targets are met, then
-extrudes, places and aligns the masses within the setback envelope.
+footprints, aligns them to the nearest boundary edges, calibrates coverage with
+towers and podium until the BCR target is met, then derives floors from the FAR
+target and extrudes the masses within the setback envelope.
 
 [![UrbGEN Grasshopper definition](images/urbgen-workflow.png)](images/urbgen-workflow.png)
 
@@ -207,7 +220,7 @@ parameter space to produce large sets of valid alternatives:
 
 ![Nine generated alternatives at district scale](images/urbgen-alternatives.png)
 
-Sample files are provided in the `UrbGEN_example` folder of the repository.
+Sample files are provided in the `UrbGEN_example_v0.1.11beta` folder of the repository.
 
 ---
 
@@ -248,7 +261,7 @@ Reference for every input and output of the UrbGEN components.
 
 <b>Examples</b><br><br>
 
-<a href="https://github.com/trongtintr/UrbGEN/tree/main/UrbGEN_example/UrbGEN_example">
+<a href="https://github.com/trongtintr/UrbGEN/tree/main/UrbGEN_example_v0.1.11beta">
 View Examples
 </a>
 
@@ -262,8 +275,9 @@ Grasshopper definitions covering single-site, multi-site, and design-space workf
 
 ### Quick install
 
-Open Rhino, run the `PackageManager` command, search for **urbgen** and install.
-Restart Rhino — the components appear under the **UrbGEN** tab in Grasshopper.
+Open Rhino 8, run the `PackageManager` command, search for **urbgen**, tick
+**Include pre-releases** and install. Restart Rhino — the components appear under the
+**UrbGEN** tab in Grasshopper.
 
 Alternatively, install the `.yak` package from the command line:
 
@@ -275,8 +289,11 @@ Alternatively, install the `.yak` package from the command line:
 
 | | Component | Purpose |
 |---|---|---|
-| <img src="images/UrbGENgenerator_icon.png" width="24"> | **UrbGEN Generator** | Generates masses from a site curve under BCR / FAR / height constraints |
-| <img src="images/UrbGENPopulateRegion_icon.png" width="24"> | **UrbGEN Populate Region** | Distributes candidate building centroids inside a bounded region |
+| <img src="images/UrbGENPopulateRegion_icon.png" width="24"> | [**UrbGEN Populate Region**](components/UrbGENPopulateRegion.md) | *1 · Site* — populate a closed region with seed points |
+| <img src="images/UrbGENgenerator_icon.png" width="24"> | [**UrbGEN Massing Generator**](components/UrbGENgenerator.md) | *2 · Massing* — podium + tower massing under FAR / BCR / setback / height limits |
+| <img src="images/UrbGENHeightColors_icon.png" width="24"> | [**UrbGEN Height Colors**](components/UrbGENHeightColors.md) | *3 · Visualise* — colour buildings by height, with a legend |
+| <img src="images/UrbGENPalette_icon.png" width="24"> | [**UrbGEN Palette**](components/UrbGENPalette.md) | *3 · Visualise* — 70 sequential / diverging palettes |
+| <img src="images/UrbGENSchemeTagViewer_icon.png" width="24"> | [**UrbGEN Scheme Tag Viewer**](components/UrbGENSchemeTagViewer.md) | *3 · Visualise* — target vs actual FAR / BCR label per site |
 
 ---
 
@@ -316,9 +333,20 @@ Released under the MIT License.
 
 
 ## Components by Subcategory
-### UrbGEN
+
+### 1 | Site
 | Name | Description |
 |---|---|
-| ![UrbGEN generator](./images/UrbGENgenerator_icon.png) [UrbGEN generator](components/UrbGENgenerator.md) | UrbGEN generator component |
-| ![UrbGEN_PopulateRegion](./images/UrbGENPopulateRegion_icon.png) [UrbGEN_PopulateRegion](components/UrbGENPopulateRegion.md) | UrbGEN_PopulateRegion component |
+| ![UrbGEN Populate Region](./images/UrbGENPopulateRegion_icon.png) [UrbGEN Populate Region](components/UrbGENPopulateRegion.md) | Populate a closed region with seed points, by count or by minimum distance |
 
+### 2 | Massing
+| Name | Description |
+|---|---|
+| ![UrbGEN Massing Generator](./images/UrbGENgenerator_icon.png) [UrbGEN Massing Generator](components/UrbGENgenerator.md) | Podium + tower massing under FAR / BCR / setback / height limits |
+
+### 3 | Visualise
+| Name | Description |
+|---|---|
+| ![UrbGEN Height Colors](./images/UrbGENHeightColors_icon.png) [UrbGEN Height Colors](components/UrbGENHeightColors.md) | Colour buildings by height, with a height legend |
+| ![UrbGEN Palette](./images/UrbGENPalette_icon.png) [UrbGEN Palette](components/UrbGENPalette.md) | 70 sequential / diverging colour palettes |
+| ![UrbGEN Scheme Tag Viewer](./images/UrbGENSchemeTagViewer_icon.png) [UrbGEN Scheme Tag Viewer](components/UrbGENSchemeTagViewer.md) | Target vs actual FAR / BCR label per site in the viewport |
